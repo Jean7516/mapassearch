@@ -21,9 +21,12 @@ export default function Home() {
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
   useEffect(() => {
 
-    if (!session?.user) {
-    //  router.push("/Login");
+    if (status === "authenticated") {
+     
+    }else{
+      router.push("/Login");
     }
+
   }, [session]);
 
   useEffect(() => {
@@ -77,7 +80,5 @@ export default function Home() {
       </>
     );
   }
-  else{
-    router.push("/Login");
-  }
+  
 }

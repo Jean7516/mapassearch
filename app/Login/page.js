@@ -9,11 +9,11 @@ function Login() {
   const { data: session } = useSession();
   const router = useRouter();
   const [popup, setPopUp] = useState(false);
-  useEffect(() => {
+ { useEffect(() => {
     if (session?.user) {
       router.push("/");
     }
-  }, [session]);
+  }, [session]);}
 
   return (
     <div className="flex flex-col  items-center   ">
