@@ -1,17 +1,24 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function HeaderNavBar() {
   const { data: session } = useSession();
   const [profileClick, setProfileClick] = useState(false);
+  const router = useRouter();
+
 
   useEffect(() => {
     setTimeout(() => {
       setProfileClick(false);
     }, 6000);
   }, [profileClick == true]);
+
+  function signOutHandler() {
+    router.push("/");
+  }
 
   return (
    
@@ -46,7 +53,12 @@ function HeaderNavBar() {
                   <h2
                     className="cursor-pointer
                hover:text-blue-500 hover:font-bold text-neutral-950"
-                    onClick={() => signOut()}
+                    onClick={() =>{
+                      signOutHandler();
+                      signOut({ redirect: false }).then(() => {
+                        router.push("/"); // Redirect to the home page after signing out
+                      });
+                    }}
                   >
                     Salir
                   </h2>
