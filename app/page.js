@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session,status } = useSession();
   const [category, setCategory] = useState();
   const [radius, setRadius] = useState(2500);
   const [businessList, setBusinessList] = useState([]);
@@ -20,8 +20,9 @@ export default function Home() {
   const router = useRouter();
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
   useEffect(() => {
+
     if (!session?.user) {
-      router.push("/Login");
+    //  router.push("/Login");
     }
   }, [session]);
 
@@ -47,32 +48,36 @@ export default function Home() {
     }
   };
 
-
-  return (
-    <>
-      <div className="grid  grid-cols-1 md:grid-cols-1  lg:p-8 gap-4 font-primary">
-        <div className="p-3">
-          <CategoryList onCategoryChange={(value) => setCategory(value)} />
-          <RangeSelect onRadiusChange={(value) => setRadius(value)} />
+  if (status === "authenticated") {
+    return (
+      <>
+        <div className="grid  grid-cols-1 md:grid-cols-1  lg:p-8 gap-4 font-primary">
+          <div className="p-3">
+            <CategoryList onCategoryChange={(value) => setCategory(value)} />
+           
+          </div>
         </div>
-      </div>
-      <div className=" col-span-3 ml-10 mr-10 mb-5">
-        <GoogleMapView businessList={businessList} />
-        <div
-          className="md:relative mx-2 w-[92%] 
-           bottom-3 relative md:bottom-3"
-        >
-          {!loading ? (
-            <BusinessList businessList={businessList} />
-          ) : (
-            <div id="mapas" className="flex gap-3">
-              {[1, 2, 3, 4, 5].map((item, index) => (
-                <SkeltonLoading key={index} />
-              ))}
-            </div>
-          )}
+        <div className=" col-span-3 ml-10 mr-10 mb-5">
+          <GoogleMapView businessList={businessList} />
+          <div
+            className="md:relative mx-2 w-[92%] 
+             bottom-3 relative md:bottom-3"
+          >
+            {!loading ? (
+              <BusinessList businessList={businessList} />
+            ) : (
+              <div id="mapas" className="flex gap-3">
+                {[1, 2, 3, 4, 5].map((item, index) => (
+                  <SkeltonLoading key={index} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
+  else{
+    router.push("/Login");
+  }
 }
